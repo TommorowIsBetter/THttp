@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
 /**
  * 
@@ -13,11 +14,22 @@ import java.net.URL;
  * @version 2018年10月26日
  */
 public class DeleteFile {
+	private static String URL;
+	static {
+		try{
+			Properties props = new Properties();
+			props.load(DeleteFile.class.getClassLoader().getResourceAsStream("deletefile.properties"));
+			URL = props.getProperty("url");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		} 
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		URL url = null;
 		try {
-		    url = new URL("http://10.28.150.93:50070/webhdfs/v1/copy/b.txt?op=DELETE");
+		    url = new URL(URL);
 		} catch (MalformedURLException exception) {
 		    exception.printStackTrace();
 		}

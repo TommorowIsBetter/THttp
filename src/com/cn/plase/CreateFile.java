@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 
 	/**
 	 * 
@@ -19,6 +20,21 @@ import java.net.URL;
 	 * @version 1.1
 	 */
 public class CreateFile {
+	private static String URL1;
+	private static String URL2;
+	private static String SRC;
+	static {
+		try{
+			Properties props = new Properties();
+			props.load(CreateFile.class.getClassLoader().getResourceAsStream("createfile.properties"));
+			URL1 = props.getProperty("url1");
+			URL2 = props.getProperty("url2");
+			SRC  = props.getProperty("src");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		} 
+	}
 	
 	public static final String DEF_CHATSET = "UTF-8";
     public static final int DEF_CONN_TIMEOUT = 3000;
@@ -166,13 +182,13 @@ public class CreateFile {
      * @Description 对写好的方法进行调用。
      */
     public static void main(String[] args) throws Exception {
-    	int statuscode = get("http://10.28.150.93:50070/webhdfs/v1/TestHttp?op=CREATE");
+    	int statuscode = get(URL1);
 		System.out.println("第一次返回码："+statuscode);//此时的返回码应该是307才是正常的
-		File file = new File("e://demo/testhttp.txt");
+		File file = new File(SRC);
 		/**
 		 * 第二步上传操作，返回值应该是201才是正确的
 		 */
-		uploadFile(file,"http://10.28.150.94:50075/webhdfs/v1/TestHttp/testhttp.txt?op=CREATE&namenoderpcaddress=10.28.150.93:9000");
+		uploadFile(file,URL2);
     }
 }
 

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.Properties;
 import java.io.File;
 import java.io.FileOutputStream;
 /**
@@ -15,12 +16,21 @@ import java.io.FileOutputStream;
  * @version 2018年10月26日
  */
 public class GetFile {
-
+	private static String URL;
+	static {
+		try{
+			Properties props = new Properties();
+			props.load(GetFile.class.getClassLoader().getResourceAsStream("getfile.properties"));
+			URL = props.getProperty("url");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		} 
+	}
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String url="http://10.28.150.93:50070/webhdfs/v1/copy/a.iso?op=OPEN";
 	    String token="v32Eo2Tw+qWI/eiKW3D8ye7l19mf1NngRLushO6CumLMHIO1aryun0/Y3N3YQCv/TqzaO/TFHw4=";
-        GetFile.downLoadFromUrl(url,"b.iso","E:\\",token);
+        GetFile.downLoadFromUrl(URL,"b.iso","E:\\",token);
         System.out.println("下载完成");
 	}
 	/**
