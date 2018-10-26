@@ -5,11 +5,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * 
+ * @author wangyan
+ * @date 2018年10月26日
+ * @Description 这个类的作用是实现对HDFS文件的删除，删除之后的返回码应该是200才是正确的。
+ * @version 2018年10月26日
+ */
 public class DeleteFile {
-    /**
-     * 删除HDFS文件系统上面的文件
-     * @param args
-     */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		URL url = null;

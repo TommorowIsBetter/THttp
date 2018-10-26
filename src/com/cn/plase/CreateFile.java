@@ -10,7 +10,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
+	/**
+	 * 
+	 * @author wangyan
+	 * @date 2018年10月26日
+	 * @Description 这个类的作用是实现文件上传到HDFS文件系统里面去，根据WebHDFS的REST API接口要求。实现上传需要两步，第一步是不带文件的PUT提交操作，正常
+	 * 的返回值是307，第二步操作是带文件的PUT操作，上传创建成功返回值为201。如果文件已经存在，继续上传操作的话，会报403的错误。
+	 * @version 1.1
+	 */
 public class CreateFile {
 	
 	public static final String DEF_CHATSET = "UTF-8";
@@ -21,6 +28,14 @@ public class CreateFile {
     private static final String nextLine = "\r\n"; 
     private static final String twoHyphens = "--"; 
     private static final String boundary = "wk_file_2519775"; 
+  /**
+   * 
+   * @param urlPath 要访问的ulr连接。
+   * @param method  方法是HTTP方法中其中之一，例如GET,POST,PUT等操作。
+   * @return HttpURLConnection  返回一个连接
+   * @throws IOException
+   * @Description 这个方法的作用，是为uploadFile()方法进行调用。
+   */
     private static HttpURLConnection createConnection(String urlPath, String method) 
     		throws IOException 
     { 
@@ -31,7 +46,13 @@ public class CreateFile {
     	return httpURLConnection; 
     }
 
-	
+	/**
+	 * 
+	 * @param file 要上传的文件
+	 * @param url  要上传的连接
+	 * @Description 这个方法的作用是输入参数，实现文件的上传。此方法应该在第二步，因为WebHDFS的要求第二步可以
+	 * 带文件PUT操作。
+	 */
     private static void uploadFile(File file, String url)
     { 
     	HttpURLConnection connection = null; 
@@ -116,9 +137,13 @@ public class CreateFile {
     	}
     
     
-
-    	
-    	
+    /**
+     * 
+     * @param urlT 第一步操作，实现URL的连接操作，此时不需要带文件，正常的返回值应该是307才正确。
+     * @return int 
+     * @throws Exception
+     * @Description 用于WebHDFS文件上传的第一步操作。
+     */
     public static int get(String urlT) throws Exception {
         HttpURLConnection conn = null;
         URL url = new URL(urlT);
@@ -134,14 +159,20 @@ public class CreateFile {
         return statusCode;
         
     }
+    /**
+     * 
+     * @param args
+     * @throws Exception
+     * @Description 对写好的方法进行调用。
+     */
     public static void main(String[] args) throws Exception {
     	int statuscode = get("http://10.28.150.93:50070/webhdfs/v1/TestHttp?op=CREATE");
-		System.out.println("第一次返回码："+statuscode);
+		System.out.println("第一次返回码："+statuscode);//此时的返回码应该是307才是正常的
 		File file = new File("e://demo/testhttp.txt");
+		/**
+		 * 第二步上传操作，返回值应该是201才是正确的
+		 */
 		uploadFile(file,"http://10.28.150.94:50075/webhdfs/v1/TestHttp/testhttp.txt?op=CREATE&namenoderpcaddress=10.28.150.93:9000");
-        
-
     }
-
 }
 
